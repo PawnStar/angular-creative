@@ -1,0 +1,6 @@
+<div>
+  <p class="PlayState">{{playString}}</p>
+
+  <button (click)="playPause()">{{playAction}}</button>
+  <button *ngIf="!playState" (click)="continue()">Continue</button>
+</div>

@@ -11,17 +11,29 @@ import {
   default as reducer
 } from './reducer';
 
+import musicController from './musicController'
+
 export const AppStore = new InjectionToken('App.store');
 
 const devtools: StoreEnhancer<AppState> =
   window['devToolsExtension'] ?
   window['devToolsExtension']() : f => f;
 
+let store: Store<AppState> = null;
+
 export function createAppStore(): Store<AppState> {
-  return createStore<AppState>(
-    reducer,
-    compose(devtools)
-  );
+  if(!store){
+    store = createStore<AppState>(
+      reducer,
+      compose(devtools)
+    );
+
+    store.subscribe(()=>{
+      musicController.reduxUpdate(store)
+    })
+  }
+
+  return store;
 }
 
 export const appStoreProviders = [

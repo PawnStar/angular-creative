@@ -10,8 +10,7 @@ import {
 
 import { AppComponent } from './app.component';
 import { ReduxStateComponent } from './redux-state/redux-state';
-import { NewUserForm } from './new-user-form/new-user-form';
-import { UserList } from './user-list/user-list';
+import { PlayerControls } from './controls/controls'
 
 import {
   AppStore,
@@ -22,8 +21,7 @@ import {
   declarations: [
     AppComponent,
     ReduxStateComponent,
-    NewUserForm,
-    UserList
+    PlayerControls
   ],
   imports: [
     BrowserModule,

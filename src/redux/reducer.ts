@@ -2,14 +2,21 @@
 
 import { Reducer, combineReducers } from 'redux';
 
-import { UsersState, UsersReducer } from './users/users';
+import { SongsState } from './songs/datatypes'
+import SongsReducer from './songs/reducer';
+
+import { PlayerState } from './player/datatypes';
+import PlayerReducer from './player/reducer';
+
  
  export interface AppState {
-  users: UsersState
+  songs: SongsState,
+  player: PlayerState
  }
  
  const rootReducer: Reducer<AppState> = combineReducers<AppState>({
-  users: UsersReducer
+  songs: SongsReducer,
+  player: PlayerReducer
  });
  
  export default rootReducer;
