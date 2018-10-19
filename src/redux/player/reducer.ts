@@ -8,7 +8,8 @@ const defaultState : PlayerState = {
   currentSong: 'furi',
   currentLoopIndex: 0,
   duration: 0,
-  position: 0
+  position: 0,
+  setPosition: null
 }
 
 export default function(state: PlayerState = defaultState, action: Action): PlayerState {
@@ -39,6 +40,16 @@ export default function(state: PlayerState = defaultState, action: Action): Play
         return {
           ...state,
           position: (action as actions.PositionAction).position
+        }
+      case actions.SETPOSITON:
+        return {
+          ...state,
+          setPosition: (action as actions.SetPosition).position
+        }
+      case actions.SETLOOP:
+        return {
+          ...state,
+          currentLoopIndex: (action as actions.SetLoop).index
         }
     default:
       return state;

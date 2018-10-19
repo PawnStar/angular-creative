@@ -23,7 +23,7 @@ export class PlayerControls {
   playAction: string
   duration: number
   position: string
-  currentLoop: string  
+  currentLoop: string
 
   constructor(@Inject(AppStore) private store: Redux.Store<AppState>,
               private el: ElementRef, private ref: ChangeDetectorRef) {
@@ -43,15 +43,24 @@ export class PlayerControls {
     this.store.dispatch(playerActions.continueAfterLoop())
   }
 
+  changePosition(event){
+    var target = (event.target.className == "barFill")?event.target.parentNode : event.target
+
+    this.store.dispatch(playerActions.userPosition(event.offsetX / target.offsetWidth))
+  }
+
   updateState() {
     const state = this.store.getState();
     this.playState = state.player.state;
 
-    const playStrings = ['Now playing', 'Paused', 'Stopped']
+    const playStrings = ['Now playing', 'Paused', 'Not Playing']
     this.playString = playStrings[this.playState]
 
     const playActions = ['Pause', 'Play', 'Play']
     this.playAction = playActions[this.playState]
+
+    if(state.player.duration == 0)
+      this.playString = 'Loading . . .'
 
     this.duration = state.player.duration
     this.position = 100 * (state.player.position / state.player.duration) + '%'

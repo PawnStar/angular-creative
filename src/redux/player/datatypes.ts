@@ -9,5 +9,6 @@ export interface PlayerState {
   currentSong: string
   currentLoopIndex: number,
   duration: number,
-  position: number
+  position: number,
+  setPosition: number
 }

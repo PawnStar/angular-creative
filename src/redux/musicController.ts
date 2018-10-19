@@ -11,6 +11,7 @@ let song : Howl;
 let currentLoop: Loop;
 let currentDuration: number;
 let currentPosition: number;
+let userPosition: number;
 let cache : Store<AppState>;
 
 interface MusicController {
@@ -54,6 +55,7 @@ let controller: MusicController = {
     currentLoop = currentSong.loops[state.player.currentLoopIndex];
     currentDuration = state.player.duration;
     currentPosition = state.player.position;
+    userPosition = state.player.setPosition;
 
     if(!cache)
       cache = store;
@@ -61,7 +63,33 @@ let controller: MusicController = {
 
   checkDuration: ()=>{
     window.requestAnimationFrame(controller.checkDuration)
-    
+
+    // Check for user position seek
+    if(userPosition){
+      // Start playing (unless seeked to 0)
+      if(userPosition !== 0)
+        cache.dispatch(playerActions.play())
+
+      // Seek to position
+      const newPosition = userPosition * currentDuration
+      song.seek(newPosition)
+      cache.dispatch(playerActions.userPosition(null))
+
+      // Figure out new loop state
+      const state = cache.getState()
+      const currentSong = state.songs[state.player.currentSong]
+      let nextLoop
+      for(let index in currentSong.loops){
+        const loop = currentSong.loops[index]
+        if(loop.end > newPosition * 1000){
+          nextLoop = index;
+          break;
+        }
+      }
+
+      cache.dispatch(playerActions.setLoop(nextLoop))
+    }
+
     if(!song || !song.playing())
       return;
 
@@ -72,11 +100,18 @@ let controller: MusicController = {
     if(currentPosition !== song.seek())
       cache.dispatch(playerActions.setPosition(song.seek()))
 
-    const currentMS = song.seek() * 1000
+    // Check for end of song
+    if(currentPosition >= currentDuration - .01){
+      console.log('stopping')
+      cache.dispatch(playerActions.userPosition(0))
+      cache.dispatch(playerActions.pause())
+    }
 
+    // If no current loop, don't bother checking to see if we've exceeded it
     if(!currentLoop)
       return;
 
+    const currentMS = song.seek() * 1000
     if(currentMS > currentLoop.end)
       song.seek(currentLoop.start / 1000)
   }

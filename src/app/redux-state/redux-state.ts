@@ -1,7 +1,8 @@
 import {
   Component,
   Inject,
-  ElementRef
+  ElementRef,
+  ChangeDetectorRef
 } from '@angular/core';
 import * as Redux from 'redux';
 
@@ -17,15 +18,31 @@ import {
 })
 export class ReduxStateComponent {
   stateString: String
+  showState: Boolean
+  update: Boolean
 
   constructor(@Inject(AppStore) private store: Redux.Store<AppState>,
-              private el: ElementRef) {
+              private el: ElementRef, private ref: ChangeDetectorRef) {
     store.subscribe(() => this.updateState() );
     this.updateState();
+
+    this.showState = false
+    this.update = false
+  }
+
+  toggleState() {
+    this.showState = !this.showState
   }
 
   updateState() {
     const state = this.store.getState();
     this.stateString = JSON.stringify(state, null, 2);
+
+    if(this.update)
+      this.ref.detectChanges()
+  }
+
+  ngAfterViewInit(){
+    this.update = true;
   }
 }
