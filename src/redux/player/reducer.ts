@@ -6,7 +6,9 @@ import { applySourceSpanToStatementIfNeeded } from '@angular/compiler/src/output
 const defaultState : PlayerState = {
   state: PlayState.Stopped,
   currentSong: 'furi',
-  currentLoopIndex: 0
+  currentLoopIndex: 0,
+  duration: 0,
+  position: 0
 }
 
 export default function(state: PlayerState = defaultState, action: Action): PlayerState {
@@ -28,6 +30,16 @@ export default function(state: PlayerState = defaultState, action: Action): Play
         ...state,
         currentLoopIndex: state.currentLoopIndex + 1
       }
+      case actions.DURATION:
+        return {
+          ...state,
+          duration: (action as actions.DurationAction).duration
+        }
+      case actions.POSITION:
+        return {
+          ...state,
+          position: (action as actions.PositionAction).position
+        }
     default:
       return state;
   }

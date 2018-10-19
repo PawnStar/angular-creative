@@ -9,6 +9,7 @@ import { AppStore } from 'redux/store';
 import { AppState } from 'redux/reducer';
 import { PlayState } from 'redux/player/datatypes';
 import * as playerActions from 'redux/player/actions';
+import { Loop } from 'redux/songs/datatypes';
 
 @Component({
   selector: 'controls',
@@ -19,10 +20,14 @@ export class PlayerControls {
   playState: PlayState
   playString: string
   playAction: string
+  duration: number
+  position: string
+  currentLoop: string  
 
   constructor(@Inject(AppStore) private store: Redux.Store<AppState>,
               private el: ElementRef) {
     store.subscribe(() => this.updateState() );
+    store.dispatch({type: 'NOOP'})
     this.updateState();
   }
 
@@ -46,5 +51,23 @@ export class PlayerControls {
 
     const playActions = ['Pause', 'Play', 'Play']
     this.playAction = playActions[this.playState]
+
+    this.duration = state.player.duration
+    this.position = 100 * (state.player.position / state.player.duration) + '%'
+
+    if(this.playState == PlayState.Playing){
+      let loop = state.songs[state.player.currentSong].loops[state.player.currentLoopIndex]
+      if(!loop){
+        this.currentLoop = 'Playing until end of song'
+      }else {
+        if(state.player.position * 1000 < loop.start)
+          this.currentLoop = `Playing until loop "${loop.name}"`
+        else
+          this.currentLoop = `Looping "${loop.name}"`
+      }
+
+      this.playString = this.currentLoop
+    }
+
   }
 }

@@ -1,4 +1,10 @@
 <div>
+  <div class="playerBar">
+    <div *ngIf="!!duration">
+      <div [ngStyle]="{'width': position}"></div>
+    </div>
+  </div>
+
   <p class="PlayState">{{playString}}</p>
 
   <button (click)="playPause()">{{playAction}}</button>

@@ -7,5 +7,7 @@ export enum PlayState {
 export interface PlayerState {
   state: PlayState,
   currentSong: string
-  currentLoopIndex: number
+  currentLoopIndex: number,
+  duration: number,
+  position: number
 }

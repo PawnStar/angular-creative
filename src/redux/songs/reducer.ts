@@ -9,11 +9,11 @@ const defaultState : SongsState = {
       './assets/furi01.mp3'
     ],
     loops: [
-      {start: 7674, end: 11505},
-      {start: 19444, end: 19458},
-      {start: 19563, end: 27196},
-      {start: 34818, end: 50085},
-      {start: 57432, end: 61255}
+      {start: 7674, end: 11505, name: 'intro'},
+      {start: 19444, end: 19458, name: 'silence'},
+      {start: 19563, end: 27196, name: 'build up'},
+      {start: 34818, end: 50085, name: 'battle'},
+      {start: 57432, end: 61255, name: 'cooldown'}
     ],
     uuid: 'furi'
   }

@@ -1,6 +1,7 @@
 export interface Loop {
   start: number,
-  end: number
+  end: number,
+  name: string
 }
 
 export interface Song {
