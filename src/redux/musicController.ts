@@ -6,7 +6,6 @@ import { PlayState } from './player/datatypes'
 import { Loop } from './songs/datatypes'
 import {Howl, Howler} from 'howler';
 import * as playerActions from './player/actions'
-import { animation } from '@angular/core/src/animation/dsl';
 
 let song : Howl;
 let currentLoop: Loop;

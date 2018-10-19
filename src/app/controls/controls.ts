@@ -1,7 +1,8 @@
 import {
   Component,
   Inject,
-  ElementRef
+  ElementRef,
+  ChangeDetectorRef
 } from '@angular/core';
 import * as Redux from 'redux';
 
@@ -25,7 +26,7 @@ export class PlayerControls {
   currentLoop: string  
 
   constructor(@Inject(AppStore) private store: Redux.Store<AppState>,
-              private el: ElementRef) {
+              private el: ElementRef, private ref: ChangeDetectorRef) {
     store.subscribe(() => this.updateState() );
     store.dispatch({type: 'NOOP'})
     this.updateState();
@@ -69,5 +70,7 @@ export class PlayerControls {
       this.playString = this.currentLoop
     }
 
+    if(this.duration)
+      this.ref.detectChanges()
   }
 }
